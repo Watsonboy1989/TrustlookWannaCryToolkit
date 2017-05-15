@@ -16,6 +16,13 @@ import sys
 from impacket import smb
 from ipaddr import IPv4Network
 
+def lookup(addr):
+	try:
+		name,alias,addresslist = socket.gethostbyaddr(addr)
+		return name
+	except socket.herror:
+		return addr
+    
 timeout = 0.5
 def parse_options():
     """parse options"""
@@ -108,7 +115,7 @@ def scan(host):
                 print('%s - system is vulnerable, DoublePulsa infection - Arch: %s Key:0x%x ' % \
                       (host, get_arch(sig2),xor_key(sig1)))
             else:
-                print('%s - system is vulnerable' % host)
+                print '%s - system is vulnerable' % lookup(host)
 
         elif status == 0xc0000008 or status == 0xc0000022:
             # STATUS_INVALID_HANDLE or STATUS_ACCESS_DENIED
